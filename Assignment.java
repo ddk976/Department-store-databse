@@ -74,8 +74,9 @@ class Assignment {
 		String stockAmount="select ProductStockAmount From INVENTORY WHERE ProductID=?";
 		String stmt3 = "INSERT INTO ORDER_PRODUCTS VALUES"+"(?,?,?)";
 		String stmt4="INSERT INTO STAFF_OPDERS VALUES"+"(?,?)";
-		PreparedStatement p2=conn.prepareStatement(stmt2);
-		PreparedStatement pStockAmount=conn.prepareStatement(stockAmount);
+		try{
+			PreparedStatement p2=conn.prepareStatement(stmt2);
+			PreparedStatement pStockAmount=conn.prepareStatement(stockAmount);
 			int[] stock = new int[productIDs.length];
 			for(int i=0;i<productIDs.length;i++){
 				pStockAmount.setInt(1,productIDs[1]);
@@ -106,6 +107,10 @@ class Assignment {
 				print[0]=r.getInt(1);
 				System.out.println("Product ID"+productIDs[1]+"is now at"+print[i]);
 			}
+		}catch(SQLException se){
+			System.out.println("Could not do process");
+			se.printStackTrace();
+		}
 			
 	 }
 	
@@ -119,8 +124,8 @@ class Assignment {
 	public static void option1(Connection conn, int[] productIDs, int[] quantities, String orderDate, int staffID) {
 		// Incomplete - Code for option 1 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
-		
-		PreparedStatement p1=conn.prepareStatement(stmt1,p1.RETURN_GENERATED_KEYS);
+		try{
+			PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"InStore");
 			p1.setInt(2,1);
 			p1.setString(3,orderDate);
@@ -128,7 +133,10 @@ class Assignment {
 			ResultSet r1=p1.getGeneratedKeys();
 			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,orderDate,staffID);
-		
+		}catch(SQLException se){
+			System.out.println("Could not option");
+			se.printStackTrace();
+		}
 
 		// }catch(SQLException se){
 		// 	System.out.println("Could not open connection with connection string"+conn);
@@ -150,7 +158,8 @@ class Assignment {
 		// Incomplete - Code for option 2 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
 		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(oid,?,?,?)";
-		PreparedStatement p1=conn.prepareStatement(stmt1,p1.RETURN_GENERATED_KEYS);
+	try{
+		PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"Collection");
 			p1.setInt(2,0);
 			p1.setString(3,orderDate);
@@ -163,7 +172,10 @@ class Assignment {
 			p2.setString(2,LName);
 			p2.setString(3,collectionDate);
 			p2.executeUpdate();
-
+		}catch(SQLException se){
+			System.out.println("Could not option 2");
+			se.printStackTrace();
+		}
 
 	}
 
@@ -185,7 +197,8 @@ class Assignment {
 		// Incomplete - Code for option 3 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
 		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(oid,?,?,?,?,?,?)";
-		PreparedStatement p1=conn.prepareStatement(stmt1,p1.RETURN_GENERATED_KEYS);
+	try{
+		PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"Delivery");
 			p1.setInt(2,0);
 			p1.setString(3,orderDate);
@@ -200,6 +213,10 @@ class Assignment {
 			p2.setString(4,street);
 			p2.setString(5,city);
 			p2.setString(6,deliveryDate);
+		}catch(SQLException se){
+		System.out.println("Could not option3");
+			se.printStackTrace();
+		}
 	}
 
 	/**
