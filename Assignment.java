@@ -1,7 +1,9 @@
 import java.io.*;
 import java.sql.*;
 import java.sql.Date;  
- 
+ import java.time.*;
+import java.time.format.*;
+import java.util.Locale;
 
 import java.util.Properties;
 
@@ -126,7 +128,9 @@ class Assignment {
 	public static void option1(Connection conn, int[] productIDs, int[] quantities, String orderDate, int staffID) {
 		// Incomplete - Code for option 1 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
-		 Date date=Date.valueOf(orderDate);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
+		LocalDate dateTime = LocalDate.parse(orderDate, formatter);
+		Date date=Date.valueOf(dateTime);
 		try{
 			PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"InStore");
@@ -161,8 +165,11 @@ class Assignment {
 		// Incomplete - Code for option 2 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
 		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(oid,?,?,?)";
-		Date oDate=Date.valueOf(orderDate);
-		Date cDate=Date.valueOf(collectionDate);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
+		LocalDate odateTime = LocalDate.parse(orderDate, formatter);
+		LocalDate cdateTime = LocalDate.parse(collectionDate, formatter);
+		Date oDate=Date.valueOf(odateTime);
+		Date cDate=Date.valueOf(cdateTime);
 	try{
 		PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"Collection");
@@ -202,8 +209,11 @@ class Assignment {
 		// Incomplete - Code for option 3 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
 		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(oid,?,?,?,?,?,?)";
-		Date oDate=Date.valueOf(orderDate);
-		Date dDate=Date.valueOf(deliveryDate);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
+		LocalDate odateTime = LocalDate.parse(orderDate, formatter);
+		LocalDate ddateTime = LocalDate.parse(deliveryDate, formatter);
+		Date oDate=Date.valueOf(odateTime);
+		Date dDate=Date.valueOf(ddateTime);
 	try{
 		PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"Delivery");
