@@ -74,7 +74,7 @@ class Assignment {
 		conn.close();
 	}
 	 static void process1(Connection conn,int oid,int[] productIDs, int[] quantities, int staffID){
-		 String stmt2 = "UPDATE INVENTORY SET ProduckStockAmount=? WHERE ProductID = ?";
+		 String stmt2 = "UPDATE INVENTORY SET ProductStockAmount=? WHERE ProductID = ?";
 		String stockAmount="select ProductStockAmount From INVENTORY WHERE ProductID=?";
 		String stmt3 = "INSERT INTO ORDER_PRODUCTS VALUES"+"(?,?,?)";
 		String stmt4="INSERT INTO STAFF_OPDERS VALUES"+"(?,?)";
@@ -84,8 +84,10 @@ class Assignment {
 			int[] stock = new int[productIDs.length];
 			for(int i=0;i<productIDs.length;i++){
 				pStockAmount.setInt(1,productIDs[1]);
-				ResultSet r=pStockAmount.executeQuery();
-				stock[0]=r.getInt(1);
+				ResultSet r1=pStockAmount.executeQuery();
+				while(r1.next()){
+				stock[0]=r1.getInt(1);
+				}
 			}
 			for(int i=0;i<productIDs.length;i++){
 				p2.setInt(1,productIDs[i]);
@@ -107,9 +109,10 @@ class Assignment {
 			int[] print = new int[productIDs.length];
 			for(int i=0;i<productIDs.length;i++){
 				pStockAmount.setInt(1,productIDs[1]);
-				ResultSet r=pStockAmount.executeQuery();
-				print[0]=r.getInt(1);
-				System.out.println("Product ID"+productIDs[1]+"is now at"+print[i]);
+				ResultSet r2=pStockAmount.executeQuery();
+				while(r2.next()){
+				print[0]=r2.getInt(1);
+				System.out.println("Product ID"+productIDs[1]+"is now at"+print[i]);}
 			}
 		}catch(SQLException se){
 			System.out.println("Could not do process");
@@ -165,7 +168,7 @@ class Assignment {
 	public static void option2(Connection conn, int[] productIDs, int[] quantities, String orderDate, String collectionDate, String fName, String LName, int staffID) {
 		// Incomplete - Code for option 2 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)" +"RETURNING OrderID;";
-		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(oid,?,?,?)";
+		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(?,?,?,?)";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
 		LocalDate odateTime = LocalDate.parse(orderDate, formatter);
 		LocalDate cdateTime = LocalDate.parse(collectionDate, formatter);
@@ -182,9 +185,10 @@ class Assignment {
 			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,staffID);
 		PreparedStatement p2=conn.prepareStatement(stmt2);
-			p2.setString(1,fName);
-			p2.setString(2,LName);
-			p2.setDate(3,cDate);
+			p2.setInt(1.oid);
+			p2.setString(2,fName);
+			p2.setString(3,LName);
+			p2.setDate(4,cDate);
 			p2.executeUpdate();
 		}catch(SQLException se){
 			System.out.println("Could not option 2");
@@ -210,7 +214,7 @@ class Assignment {
 				   String house, String street, String city, int staffID) {
 		// Incomplete - Code for option 3 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)"+"RETURNING OrderID";
-		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(oid,?,?,?,?,?,?)";
+		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(?,?,?,?,?,?,?)";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
 		LocalDate odateTime = LocalDate.parse(orderDate, formatter);
 		LocalDate ddateTime = LocalDate.parse(deliveryDate, formatter);
@@ -227,12 +231,13 @@ class Assignment {
 			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,staffID);
 		PreparedStatement p2=conn.prepareStatement(stmt2);
-			p2.setString(1,fName);
-			p2.setString(2,LName);
-			p2.setString(3,house);
-			p2.setString(4,street);
-			p2.setString(5,city);
-			p2.setDate(6,dDate);
+			p2.setInt(1.oid);
+			p2.setString(2,fName);
+			p2.setString(3,LName);
+			p2.setString(4,house);
+			p2.setString(5,street);
+			p2.setString(6,city);
+			p2.setDate(7,dDate);
 		}catch(SQLException se){
 		System.out.println("Could not option3");
 			se.printStackTrace();
