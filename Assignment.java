@@ -127,7 +127,7 @@ class Assignment {
 	*/
 	public static void option1(Connection conn, int[] productIDs, int[] quantities, String orderDate, int staffID) {
 		// Incomplete - Code for option 1 goes here
-		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
+		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)"+  "RETURNING OrderID;";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
 		LocalDate dateTime = LocalDate.parse(orderDate, formatter);
 		Date date=Date.valueOf(dateTime);
@@ -138,6 +138,7 @@ class Assignment {
 			p1.setDate(3,date);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
+			r1.next();
 			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,staffID);
 		}catch(SQLException se){
@@ -163,7 +164,7 @@ class Assignment {
 	*/
 	public static void option2(Connection conn, int[] productIDs, int[] quantities, String orderDate, String collectionDate, String fName, String LName, int staffID) {
 		// Incomplete - Code for option 2 goes here
-		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
+		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)" +"RETURNING OrderID;";
 		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(oid,?,?,?)";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
 		LocalDate odateTime = LocalDate.parse(orderDate, formatter);
@@ -177,6 +178,7 @@ class Assignment {
 			p1.setDate(3,oDate);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
+			r1.next();
 			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,staffID);
 		PreparedStatement p2=conn.prepareStatement(stmt2);
@@ -207,7 +209,7 @@ class Assignment {
 	public static void option3(Connection conn, int[] productIDs, int[] quantities, String orderDate, String deliveryDate, String fName, String LName,
 				   String house, String street, String city, int staffID) {
 		// Incomplete - Code for option 3 goes here
-		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
+		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)"+"RETURNING OrderID";
 		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(oid,?,?,?,?,?,?)";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
 		LocalDate odateTime = LocalDate.parse(orderDate, formatter);
@@ -221,6 +223,7 @@ class Assignment {
 			p1.setDate(3,oDate);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
+			r1.next();
 			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,staffID);
 		PreparedStatement p2=conn.prepareStatement(stmt2);
