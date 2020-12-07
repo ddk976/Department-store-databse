@@ -94,25 +94,29 @@ class Assignment {
 				p2.setInt(2,quantities[i]-stock[i]);
 				p2.executeUpdate();
 			}		
+			System.out.println("Success p4");
 			PreparedStatement p3=conn.prepareStatement(stmt3);
 			for(int i=0;i<productIDs.length;i++){
 				p3.setInt(1,oid);
-				p2.setInt(2,productIDs[i]);
-				p2.executeUpdate();
+				p3.setInt(2,productIDs[i]);
+				p3.executeUpdate();
 			}
+			System.out.println("Success p3");
 			PreparedStatement p4=conn.prepareStatement(stmt4);
 			for(int i=0;i<productIDs.length;i++){
-				p3.setInt(1,staffID);
-				p2.setInt(2,productIDs[i]);
-				p2.executeUpdate();
+				p4.setInt(1,staffID);
+				p4.setInt(2,productIDs[i]);
+				p4.executeUpdate();
 			}
+			System.out.println.("Success p4");
 			int[] print = new int[productIDs.length];
 			for(int i=0;i<productIDs.length;i++){
 				pStockAmount.setInt(1,productIDs[1]);
 				ResultSet r2=pStockAmount.executeQuery();
+				System.out.println("Im in for loop");
 				while(r2.next()){
 				print[0]=r2.getInt(1);
-				System.out.println("Product ID"+productIDs[1]+"is now at"+print[i]);}
+				System.out.println("Product ID"+productIDs[i]+"is now at"+print[i]);}
 			}
 		}catch(SQLException se){
 			System.out.println("Could not do process");
