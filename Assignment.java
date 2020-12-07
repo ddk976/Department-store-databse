@@ -170,22 +170,22 @@ class Assignment {
 		// Incomplete - Code for option 8 goes here
 	}
 
-    // public static Connection getConnection(){
-    //     Properties props = new Properties();
-    //     props.setProperty("socketFactory", "org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg");
+    public static Connection getConnection(){
+        Properties props = new Properties();
+        props.setProperty("socketFactory", "org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg");
 
-    //     props.setProperty("socketFactoryArg",System.getenv("PGHOST") + "/.s.PGSQL.5432");
-    //     Connection conn;
-    //     try{
-    //       conn = DriverManager.getConnection("jdbc:postgresql://localhost/deptstore", props);
-    //       return conn;
-    //     }catch(Exception e){
-    //         e.printStackTrace();
-    //     }
-    //     return null;
-    // }
+        props.setProperty("socketFactoryArg",System.getenv("PGHOST") + "/.s.PGSQL.5432");
+        Connection conn;
+        try{
+          conn = DriverManager.getConnection("jdbc:postgresql://localhost/deptstore", props);
+          return conn;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-    public static Connection getConnection() {
+/*   public static Connection getConnection() {
         //This version of getConnection uses ports to connect to the server rather than sockets
         //If you use this method, you should comment out the above getConnection method, and comment out lines 19 and 21
         String user = "postgres";
@@ -210,5 +210,5 @@ class Assignment {
 
     }
 
-	
+	*/
 }
