@@ -21,18 +21,6 @@ class Assignment {
 			return "";
 		}
  	}
-	// static void loop(){
-	// 	int count=1;
-    //     int[] productIDs = new int[50];
-    //     int[] quantities = new int [50];
-    //     String end="Y";
-    //     while(end.charAt(0)=='Y'){
-    //         productIDs[count-1]=Integer.parseInt(String.valueOf(readEntry("Enter a product ID:")));
-    //         quantities[count-1]=Integer.parseInt(String.valueOf(readEntry("Enter the quantity sold:")));
-    //         count++;
-    //         end = readEntry("Is there another product in the order?:");
-    //     } 
-	// }
 	public static void main(String args[]) throws SQLException, IOException {
 		// You should only need to fetch the connection details once
 		Connection conn = getConnection();
@@ -81,6 +69,45 @@ class Assignment {
 		}
 		conn.close();
 	}
+	 static void process1(int oid,int[] productIDs, int[] quantities, String orderDate, int staffID){
+		 String stmt2 = "UPDATE INVENTORY SET ProduckStockAmount=? WHERE ProductID = ?";
+		String stockAmount="select ProductStockAmount From INVENTORY WHERE ProductID=?";
+		String stmt3 = "INSERT INTO ORDER_PRODUCTS VALUES"+"(?,?,?)";
+		String stmt4="INSERT INTO STAFF_OPDERS VALUES"+"(?,?)";
+		PreparedStatement p2=conn.PreparedStatement(stmt2);
+			PreparedStatement pStockAoumt=conn.PreparedStatement(stockAmount);
+			int[] stock = new int[productIDs.length];
+			for(int i=0;i<productIDs.length;i++){
+				pStockAmount.setInt(1.productIDs[1]);
+				ResultSet r=s.executeQuery(pStockAmount);
+				stock[0]=r.getInt(1);
+			}
+			for(i=0;i<productIDs.length;i++){
+				p2.setInt(1,productIDs[i]);
+				p2.setInt(2,quantities[i]-stock[i]);
+				p2.executeUpdate();
+			}		
+			PreparedStatement p3=conn.PreparedStatement(stmt3);
+			for(i=0;i<productIDs.length;i++){
+				p3.setInt(1,oid);
+				p2.setInt(2,productIDs[i]);
+				p2.executeUpdate();
+			}
+			PreparedStatement p4=conn.PreparedStatement(stmt4);
+			for(i=0;i<productIDs.length;i++){
+				p3.setInt(1,staffID);
+				p2.setInt(2,productIDs[i]);
+				p2.executeUpdate();
+			}
+			int[] print = new int[productIDs.length];
+			for(i=0;i<productIDs.length;i++){
+				pStockAmount.setInt(1.productIDs[1]);
+				ResultSet r=s.executeQuery(pStockAmount);
+				print[0]=r.getInt(1);
+				System.out.println("Product ID"+productIDs[1]+"is now at"+print[i]);
+			}
+			
+	 }
 	
 	/**
 	* @param conn An open database connection 
@@ -91,8 +118,22 @@ class Assignment {
 	*/
 	public static void option1(Connection conn, int[] productIDs, int[] quantities, String orderDate, int staffID) {
 		// Incomplete - Code for option 1 goes here
-		String stmt1 = "SELECT OrderID FROM ORDERS WHERE OrderType='InStore'";
+		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
+		
+		PreparedStatement p1=conn.PreparedStatement(stmt1,p1.RETURN_GENERATED_KEYS);
+			p1.setString(1,"InStore");
+			p1.setInt(2,1);
+			p1.setString(3,orderDate);
+			p1.executeUpdate();
+			ResultSet r1=p1.getGeneratedKeys();
+			int oid=r1.getInt()；
+			process1(oid,productIDs,quantities,orderDate,staffID);
+		
 
+		// }catch(SQLException se){
+		// 	System.out.println("Could not open connection with connection string"+conn);
+		// 	se.printlnStackTrace();
+		// }
 	}
 
 	/**
@@ -107,12 +148,23 @@ class Assignment {
 	*/
 	public static void option2(Connection conn, int[] productIDs, int[] quantities, String orderDate, String collectionDate, String fName, String LName, int staffID) {
 		// Incomplete - Code for option 2 goes here
-		int count=0;
-		while((productIDs[count])!= 0){
-			System.out.println(productIDs[count]);
-			System.out.println(quantities[count]);
-			count++;
-		}
+		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
+		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(oid,?,?,?)";
+		PreparedStatement p1=conn.PreparedStatement(stmt1,p1.RETURN_GENERATED_KEYS);
+			p1.setString(1,"Collection");
+			p1.setInt(2,0);
+			p1.setString(3,orderDate);
+			p1.executeUpdate();
+			ResultSet r1=p1.getGeneratedKeys();
+			int oid=r1.getInt()；
+			process1(oid,productIDs,quantities,orderDate,staffID);
+		PreparedStatement p2=conn.PreparedStatement(stmt2);
+			p2.setString(1,fName);
+			p2.setString(2,LName);
+			p2.setString(3,collectionDate);
+			p2.executeUpdate();
+
+
 	}
 
 	/**
@@ -131,6 +183,23 @@ class Assignment {
 	public static void option3(Connection conn, int[] productIDs, int[] quantities, String orderDate, String deliveryDate, String fName, String LName,
 				   String house, String street, String city, int staffID) {
 		// Incomplete - Code for option 3 goes here
+		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
+		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(oid,?,?,?,?,?,?)";
+		PreparedStatement p1=conn.PreparedStatement(stmt1,p1.RETURN_GENERATED_KEYS);
+			p1.setString(1,"Delivery");
+			p1.setInt(2,0);
+			p1.setString(3,orderDate);
+			p1.executeUpdate();
+			ResultSet r1=p1.getGeneratedKeys();
+			int oid=r1.getInt()；
+			process1(oid,productIDs,quantities,orderDate,staffID);
+		PreparedStatement p2=conn.PreparedStatement(stmt2);
+			p2.setString(1,fName);
+			p2.setString(2,LName);
+			p2.setString(3,house);
+			p2.setString(4,street);
+			p2.setString(5,city);
+			p2.setString(6,deliveryDate);
 	}
 
 	/**
@@ -185,7 +254,7 @@ class Assignment {
         return null;
     }
 
-/*   public static Connection getConnection() {
+  /* public static Connection getConnection() {
         //This version of getConnection uses ports to connect to the server rather than sockets
         //If you use this method, you should comment out the above getConnection method, and comment out lines 19 and 21
         String user = "postgres";
@@ -208,7 +277,7 @@ class Assignment {
             return null;
         }
 
-    }
+    }*/
 
-	*/
+	
 }
