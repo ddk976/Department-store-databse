@@ -78,7 +78,7 @@ class Assignment {
 			PreparedStatement pStockAoumt=conn.PreparedStatement(stockAmount);
 			int[] stock = new int[productIDs.length];
 			for(int i=0;i<productIDs.length;i++){
-				pStockAmount.setInt(1.productIDs[1]);
+				pStockAmount.setInt(1,productIDs[1]);
 				ResultSet r=s.executeQuery(pStockAmount);
 				stock[0]=r.getInt(1);
 			}
@@ -101,7 +101,7 @@ class Assignment {
 			}
 			int[] print = new int[productIDs.length];
 			for(i=0;i<productIDs.length;i++){
-				pStockAmount.setInt(1.productIDs[1]);
+				pStockAmount.setInt(1,productIDs[1]);
 				ResultSet r=s.executeQuery(pStockAmount);
 				print[0]=r.getInt(1);
 				System.out.println("Product ID"+productIDs[1]+"is now at"+print[i]);
@@ -126,7 +126,7 @@ class Assignment {
 			p1.setString(3,orderDate);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
-			int oid=r1.getInt()；
+			int oid=r1.getInt();
 			process1(oid,productIDs,quantities,orderDate,staffID);
 		
 
@@ -156,7 +156,7 @@ class Assignment {
 			p1.setString(3,orderDate);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
-			int oid=r1.getInt()；
+			int oid=r1.getInt();
 			process1(oid,productIDs,quantities,orderDate,staffID);
 		PreparedStatement p2=conn.PreparedStatement(stmt2);
 			p2.setString(1,fName);
@@ -191,7 +191,7 @@ class Assignment {
 			p1.setString(3,orderDate);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
-			int oid=r1.getInt()；
+			int oid=r1.getInt();
 			process1(oid,productIDs,quantities,orderDate,staffID);
 		PreparedStatement p2=conn.PreparedStatement(stmt2);
 			p2.setString(1,fName);
