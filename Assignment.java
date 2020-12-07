@@ -1,5 +1,7 @@
 import java.io.*;
 import java.sql.*;
+import java.sql.Date;  
+ 
 
 import java.util.Properties;
 
@@ -69,7 +71,7 @@ class Assignment {
 		}
 		conn.close();
 	}
-	 static void process1(Connection conn,int oid,int[] productIDs, int[] quantities, String orderDate, int staffID){
+	 static void process1(Connection conn,int oid,int[] productIDs, int[] quantities, int staffID){
 		 String stmt2 = "UPDATE INVENTORY SET ProduckStockAmount=? WHERE ProductID = ?";
 		String stockAmount="select ProductStockAmount From INVENTORY WHERE ProductID=?";
 		String stmt3 = "INSERT INTO ORDER_PRODUCTS VALUES"+"(?,?,?)";
@@ -124,15 +126,16 @@ class Assignment {
 	public static void option1(Connection conn, int[] productIDs, int[] quantities, String orderDate, int staffID) {
 		// Incomplete - Code for option 1 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
+		 Date date=Date.valueOf(orderDate);
 		try{
 			PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"InStore");
 			p1.setInt(2,1);
-			p1.setString(3,orderDate);
+			p1.setDate(3,date);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
 			int oid=r1.getInt(1);
-			process1(conn,oid,productIDs,quantities,orderDate,staffID);
+			process1(conn,oid,productIDs,quantities,staffID);
 		}catch(SQLException se){
 			System.out.println("Could not option");
 			se.printStackTrace();
@@ -158,19 +161,21 @@ class Assignment {
 		// Incomplete - Code for option 2 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
 		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(oid,?,?,?)";
+		Date oDate=Date.valueOf(orderDate);
+		Date cDate=Date.valueOf(collectionDate);
 	try{
 		PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"Collection");
 			p1.setInt(2,0);
-			p1.setString(3,orderDate);
+			p1.setDate(3,oDate);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
 			int oid=r1.getInt(1);
-			process1(conn,oid,productIDs,quantities,orderDate,staffID);
+			process1(conn,oid,productIDs,quantities,staffID);
 		PreparedStatement p2=conn.prepareStatement(stmt2);
 			p2.setString(1,fName);
 			p2.setString(2,LName);
-			p2.setString(3,collectionDate);
+			p2.setDate(3,cDate);
 			p2.executeUpdate();
 		}catch(SQLException se){
 			System.out.println("Could not option 2");
@@ -197,22 +202,24 @@ class Assignment {
 		// Incomplete - Code for option 3 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
 		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(oid,?,?,?,?,?,?)";
+		Date oDate=Date.valueOf(orderDate);
+		Date dDate=Date.valueOf(deliveryDate);
 	try{
 		PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"Delivery");
 			p1.setInt(2,0);
-			p1.setString(3,orderDate);
+			p1.setDate(3,oDate);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
 			int oid=r1.getInt(1);
-			process1(conn,oid,productIDs,quantities,orderDate,staffID);
+			process1(conn,oid,productIDs,quantities,staffID);
 		PreparedStatement p2=conn.prepareStatement(stmt2);
 			p2.setString(1,fName);
 			p2.setString(2,LName);
 			p2.setString(3,house);
 			p2.setString(4,street);
 			p2.setString(5,city);
-			p2.setString(6,deliveryDate);
+			p2.setDate(6,dDate);
 		}catch(SQLException se){
 		System.out.println("Could not option3");
 			se.printStackTrace();
