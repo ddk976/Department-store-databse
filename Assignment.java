@@ -69,38 +69,39 @@ class Assignment {
 		}
 		conn.close();
 	}
-	 static void process1(int oid,int[] productIDs, int[] quantities, String orderDate, int staffID){
+	 static void process1(Connection conn,int oid,int[] productIDs, int[] quantities, String orderDate, int staffID){
 		 String stmt2 = "UPDATE INVENTORY SET ProduckStockAmount=? WHERE ProductID = ?";
 		String stockAmount="select ProductStockAmount From INVENTORY WHERE ProductID=?";
 		String stmt3 = "INSERT INTO ORDER_PRODUCTS VALUES"+"(?,?,?)";
 		String stmt4="INSERT INTO STAFF_OPDERS VALUES"+"(?,?)";
 		PreparedStatement p2=conn.PreparedStatement(stmt2);
-			PreparedStatement pStockAoumt=conn.PreparedStatement(stockAmount);
+			PreparedStatement pStockAount=conn.PreparedStatement(stockAmount);
 			int[] stock = new int[productIDs.length];
 			for(int i=0;i<productIDs.length;i++){
 				pStockAmount.setInt(1,productIDs[1]);
+				Statement s=conn.createStatement();
 				ResultSet r=s.executeQuery(pStockAmount);
 				stock[0]=r.getInt(1);
 			}
-			for(i=0;i<productIDs.length;i++){
+			for(int i=0;i<productIDs.length;i++){
 				p2.setInt(1,productIDs[i]);
 				p2.setInt(2,quantities[i]-stock[i]);
 				p2.executeUpdate();
 			}		
 			PreparedStatement p3=conn.PreparedStatement(stmt3);
-			for(i=0;i<productIDs.length;i++){
+			for(int i=0;i<productIDs.length;i++){
 				p3.setInt(1,oid);
 				p2.setInt(2,productIDs[i]);
 				p2.executeUpdate();
 			}
 			PreparedStatement p4=conn.PreparedStatement(stmt4);
-			for(i=0;i<productIDs.length;i++){
+			for(int i=0;i<productIDs.length;i++){
 				p3.setInt(1,staffID);
 				p2.setInt(2,productIDs[i]);
 				p2.executeUpdate();
 			}
 			int[] print = new int[productIDs.length];
-			for(i=0;i<productIDs.length;i++){
+			for(int i=0;i<productIDs.length;i++){
 				pStockAmount.setInt(1,productIDs[1]);
 				ResultSet r=s.executeQuery(pStockAmount);
 				print[0]=r.getInt(1);
@@ -127,7 +128,7 @@ class Assignment {
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
 			int oid=r1.getInt();
-			process1(oid,productIDs,quantities,orderDate,staffID);
+			process1(conn,oid,productIDs,quantities,orderDate,staffID);
 		
 
 		// }catch(SQLException se){
@@ -157,7 +158,7 @@ class Assignment {
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
 			int oid=r1.getInt();
-			process1(oid,productIDs,quantities,orderDate,staffID);
+			process1(conn,oid,productIDs,quantities,orderDate,staffID);
 		PreparedStatement p2=conn.PreparedStatement(stmt2);
 			p2.setString(1,fName);
 			p2.setString(2,LName);
@@ -192,7 +193,7 @@ class Assignment {
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
 			int oid=r1.getInt();
-			process1(oid,productIDs,quantities,orderDate,staffID);
+			process1(conn,oid,productIDs,quantities,orderDate,staffID);
 		PreparedStatement p2=conn.PreparedStatement(stmt2);
 			p2.setString(1,fName);
 			p2.setString(2,LName);
