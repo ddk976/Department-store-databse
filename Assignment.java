@@ -74,13 +74,12 @@ class Assignment {
 		String stockAmount="select ProductStockAmount From INVENTORY WHERE ProductID=?";
 		String stmt3 = "INSERT INTO ORDER_PRODUCTS VALUES"+"(?,?,?)";
 		String stmt4="INSERT INTO STAFF_OPDERS VALUES"+"(?,?)";
-		PreparedStatement p2=conn.PreparedStatement(stmt2);
-			PreparedStatement pStockAount=conn.PreparedStatement(stockAmount);
+		PreparedStatement p2=conn.prepareStatement(stmt2);
+		PreparedStatement pStockAmount=conn.prepareStatement(stockAmount);
 			int[] stock = new int[productIDs.length];
 			for(int i=0;i<productIDs.length;i++){
 				pStockAmount.setInt(1,productIDs[1]);
-				Statement s=conn.createStatement();
-				ResultSet r=s.executeQuery(pStockAmount);
+				ResultSet r=pStockAmount.executeQuery();
 				stock[0]=r.getInt(1);
 			}
 			for(int i=0;i<productIDs.length;i++){
@@ -88,13 +87,13 @@ class Assignment {
 				p2.setInt(2,quantities[i]-stock[i]);
 				p2.executeUpdate();
 			}		
-			PreparedStatement p3=conn.PreparedStatement(stmt3);
+			PreparedStatement p3=conn.prepareStatement(stmt3);
 			for(int i=0;i<productIDs.length;i++){
 				p3.setInt(1,oid);
 				p2.setInt(2,productIDs[i]);
 				p2.executeUpdate();
 			}
-			PreparedStatement p4=conn.PreparedStatement(stmt4);
+			PreparedStatement p4=conn.prepareStatement(stmt4);
 			for(int i=0;i<productIDs.length;i++){
 				p3.setInt(1,staffID);
 				p2.setInt(2,productIDs[i]);
@@ -103,7 +102,7 @@ class Assignment {
 			int[] print = new int[productIDs.length];
 			for(int i=0;i<productIDs.length;i++){
 				pStockAmount.setInt(1,productIDs[1]);
-				ResultSet r=s.executeQuery(pStockAmount);
+				ResultSet r=pStockAmount.executeQuery();
 				print[0]=r.getInt(1);
 				System.out.println("Product ID"+productIDs[1]+"is now at"+print[i]);
 			}
@@ -121,13 +120,13 @@ class Assignment {
 		// Incomplete - Code for option 1 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
 		
-		PreparedStatement p1=conn.PreparedStatement(stmt1,p1.RETURN_GENERATED_KEYS);
+		PreparedStatement p1=conn.prepareStatement(stmt1,p1.RETURN_GENERATED_KEYS);
 			p1.setString(1,"InStore");
 			p1.setInt(2,1);
 			p1.setString(3,orderDate);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
-			int oid=r1.getInt();
+			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,orderDate,staffID);
 		
 
@@ -151,15 +150,15 @@ class Assignment {
 		// Incomplete - Code for option 2 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
 		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(oid,?,?,?)";
-		PreparedStatement p1=conn.PreparedStatement(stmt1,p1.RETURN_GENERATED_KEYS);
+		PreparedStatement p1=conn.prepareStatement(stmt1,p1.RETURN_GENERATED_KEYS);
 			p1.setString(1,"Collection");
 			p1.setInt(2,0);
 			p1.setString(3,orderDate);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
-			int oid=r1.getInt();
+			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,orderDate,staffID);
-		PreparedStatement p2=conn.PreparedStatement(stmt2);
+		PreparedStatement p2=conn.prepareStatement(stmt2);
 			p2.setString(1,fName);
 			p2.setString(2,LName);
 			p2.setString(3,collectionDate);
@@ -186,15 +185,15 @@ class Assignment {
 		// Incomplete - Code for option 3 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)";
 		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(oid,?,?,?,?,?,?)";
-		PreparedStatement p1=conn.PreparedStatement(stmt1,p1.RETURN_GENERATED_KEYS);
+		PreparedStatement p1=conn.prepareStatement(stmt1,p1.RETURN_GENERATED_KEYS);
 			p1.setString(1,"Delivery");
 			p1.setInt(2,0);
 			p1.setString(3,orderDate);
 			p1.executeUpdate();
 			ResultSet r1=p1.getGeneratedKeys();
-			int oid=r1.getInt();
+			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,orderDate,staffID);
-		PreparedStatement p2=conn.PreparedStatement(stmt2);
+		PreparedStatement p2=conn.prepareStatement(stmt2);
 			p2.setString(1,fName);
 			p2.setString(2,LName);
 			p2.setString(3,house);
