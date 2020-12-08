@@ -98,7 +98,9 @@ class Assignment {
 			PreparedStatement p3=conn.prepareStatement(stmt3);
 			for(int i=0;i<productIDs.length;i++){
 				p3.setInt(1,oid);
+				System.out.println(productIDs[1]);
 				p3.setInt(2,productIDs[i]);
+				System.out.println(productIDs[1]);
 				p3.setInt(3,quantities[i]);
 				p3.executeUpdate();
 			}
@@ -136,7 +138,7 @@ class Assignment {
 	public static void option1(Connection conn, int[] productIDs, int[] quantities, String orderDate, int staffID) {
 		// Incomplete - Code for option 1 goes here
 		String stmt1 = "INSERT INTO ORDERS VALUES"+"(?,?,?,?)";
-		String id = "select sequence_1.nextval from DUAL";
+		String id = "SELECT nextval('sequence_1')";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
 		LocalDate dateTime = LocalDate.parse(orderDate, formatter);
 		Date date=Date.valueOf(dateTime);
@@ -181,20 +183,26 @@ class Assignment {
 		// Incomplete - Code for option 2 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)" +"RETURNING OrderID;";
 		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(?,?,?,?)";
+		String id = "SELECT nextval('sequence_1')";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
 		LocalDate odateTime = LocalDate.parse(orderDate, formatter);
 		LocalDate cdateTime = LocalDate.parse(collectionDate, formatter);
 		Date oDate=Date.valueOf(odateTime);
 		Date cDate=Date.valueOf(cdateTime);
 	try{
+		PreparedStatement pid = conn.prepareStatement(id);
+			ResultSet rid = pid.executeQuery(); 
+			int oid=0;
+			if(rid.next())
+    			 oid = rid.getInt(1);
 		PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"Collection");
 			p1.setInt(2,0);
 			p1.setDate(3,oDate);
 			p1.executeUpdate();
-			ResultSet r1=p1.getGeneratedKeys();
-			r1.next();
-			int oid=r1.getInt(1);
+			// ResultSet r1=p1.getGeneratedKeys();
+			// r1.next();
+			// int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,staffID);
 		PreparedStatement p2=conn.prepareStatement(stmt2);
 			p2.setInt(1,oid);
@@ -227,20 +235,26 @@ class Assignment {
 		// Incomplete - Code for option 3 goes here
 		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)"+"RETURNING OrderID";
 		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(?,?,?,?,?,?,?)";
+		String id = "SELECT nextval('sequence_1')";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
 		LocalDate odateTime = LocalDate.parse(orderDate, formatter);
 		LocalDate ddateTime = LocalDate.parse(deliveryDate, formatter);
 		Date oDate=Date.valueOf(odateTime);
 		Date dDate=Date.valueOf(ddateTime);
 	try{
+		PreparedStatement pid = conn.prepareStatement(id);
+			ResultSet rid = pid.executeQuery(); 
+			int oid=0;
+			if(rid.next())
+    			 oid = rid.getInt(1);
 		PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
 			p1.setString(1,"Delivery");
 			p1.setInt(2,0);
 			p1.setDate(3,oDate);
 			p1.executeUpdate();
-			ResultSet r1=p1.getGeneratedKeys();
-			r1.next();
-			int oid=r1.getInt(1);
+			// ResultSet r1=p1.getGeneratedKeys();
+			// r1.next();
+			// int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,staffID);
 		PreparedStatement p2=conn.prepareStatement(stmt2);
 			p2.setInt(1,oid);
