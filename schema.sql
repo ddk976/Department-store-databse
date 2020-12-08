@@ -6,15 +6,16 @@ CREATE TABLE INVENTORY (
   ProductStockAmount    INTEGER not null,
   PRIMARY KEY (ProductID),
   CHECK(ProductPrice>0),
-  CHECK(ProductStockAmount)
---  foreign key (dno) references department(dnumber)
+  CHECK(ProductStockAmount>0)
+
 );
--- CREATE SEQUENCE sequence_1 
---     START WITH 0  
---     INCREMENT BY 1 ;  
+DROP SEQUENCE sequence_1;
+CREATE SEQUENCE sequence_1 
+    START WITH 1  
+    INCREMENT BY 1 ;  
 DROP TABLE ORDERS CASCADE;
 CREATE TABLE ORDERS (
-OrderID     INTEGER not null,
+OrderID    INTEGER not null,
 OrderType    VARCHAR(30) not null,
 OrderCompleted    INTEGER not null,
 OrderPlaced    DATE not null,
