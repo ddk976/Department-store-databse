@@ -94,11 +94,12 @@ class Assignment {
 				p2.setInt(2,quantities[i]-stock[i]);
 				p2.executeUpdate();
 			}		
-			System.out.println("Success p4");
+			System.out.println("Success p2");
 			PreparedStatement p3=conn.prepareStatement(stmt3);
 			for(int i=0;i<productIDs.length;i++){
 				p3.setInt(1,oid);
 				p3.setInt(2,productIDs[i]);
+				p3.setInt(3,quantities[i]);
 				p3.executeUpdate();
 			}
 			System.out.println("Success p3");
@@ -108,7 +109,7 @@ class Assignment {
 				p4.setInt(2,productIDs[i]);
 				p4.executeUpdate();
 			}
-			System.out.println.("Success p4");
+			System.out.println("Success p4");
 			int[] print = new int[productIDs.length];
 			for(int i=0;i<productIDs.length;i++){
 				pStockAmount.setInt(1,productIDs[1]);
@@ -134,19 +135,26 @@ class Assignment {
 	*/
 	public static void option1(Connection conn, int[] productIDs, int[] quantities, String orderDate, int staffID) {
 		// Incomplete - Code for option 1 goes here
-		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)"+  "RETURNING OrderID;";
+		String stmt1 = "INSERT INTO ORDERS VALUES"+"(?,?,?,?)";
+		String id = "select sequence_1.nextval from DUAL";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
 		LocalDate dateTime = LocalDate.parse(orderDate, formatter);
 		Date date=Date.valueOf(dateTime);
 		try{
+			PreparedStatement pid = conn.prepareStatement(id);
+			ResultSet rid = pid.executeQuery(); 
+			int oid=0;
+			if(rid.next())
+    			 oid = rid.getInt(1);
 			PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
-			p1.setString(1,"InStore");
-			p1.setInt(2,1);
-			p1.setDate(3,date);
+			p1.setInt(1, oid); 
+			p1.setString(2,"InStore");
+			p1.setInt(3,1);
+			p1.setDate(4,date);
 			p1.executeUpdate();
-			ResultSet r1=p1.getGeneratedKeys();
-			r1.next();
-			int oid=r1.getInt(1);
+			// ResultSet r1=p1.getGeneratedKeys();
+			// r1.next();
+			// int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,staffID);
 		}catch(SQLException se){
 			System.out.println("Could not option");
@@ -189,7 +197,7 @@ class Assignment {
 			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,staffID);
 		PreparedStatement p2=conn.prepareStatement(stmt2);
-			p2.setInt(1.oid);
+			p2.setInt(1,oid);
 			p2.setString(2,fName);
 			p2.setString(3,LName);
 			p2.setDate(4,cDate);
@@ -235,7 +243,7 @@ class Assignment {
 			int oid=r1.getInt(1);
 			process1(conn,oid,productIDs,quantities,staffID);
 		PreparedStatement p2=conn.prepareStatement(stmt2);
-			p2.setInt(1.oid);
+			p2.setInt(1,oid);
 			p2.setString(2,fName);
 			p2.setString(3,LName);
 			p2.setString(4,house);
@@ -253,6 +261,7 @@ class Assignment {
 	*/
 	public static void option4(Connection conn) {
 		// Incomplete - Code for option 4 goes here
+
 	}
 
 	/**
