@@ -289,6 +289,26 @@ class Assignment {
 	*/
 	public static void option4(Connection conn) {
 		// Incomplete - Code for option 4 goes here
+		// Incomplete - Code for option 4 goes here
+		String stmt1 = "SELECT INVENTORY.ProductID,INVENTORY.ProductDesc"
+						+" SUM(ORDER_PRODUCTS.ProductQuantity * INVENTORY.ProductPrice )"
+						+"FROM INVENTORY,ORDER_PRODUCTS"
+						+"WHERE INVENTORY.ProductID=ORDER_PRODUCTS.ProductID"
+						+"GROUP BY INVENTORY.ProductID ";
+		try{
+			PreparedStatement p1=conn.prepareStatement(stmt1);
+			ResultSet r1 = p1.executeQuery(); 
+			System.out.printf("%-9s%-9s%-9d\n","ProductID","ProductDesc","TotalValueSold");
+			while(r1.next()){
+					int id = r1.getInt(1);
+					String desc = r1.getString(2);
+					int value = r1.getInt(3);
+					System.out.printf("%-9d%-9s%-9d\n",id,desc,value);
+			}
+		}catch(SQLException se){
+		System.out.println("Could not option3");
+			se.printStackTrace();
+		}
 
 	}
 
