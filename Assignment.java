@@ -314,11 +314,14 @@ class Assignment {
 	*/
 	public static void option4(Connection conn) {
 		// Incomplete - Code for option 4 goes here
-		String stmt1 = "SELECT INVENTORY.ProductID,INVENTORY.ProductDesc"
-						+" SUM(SELECT ORDER_PRODUCTS.ProductQuantity * INVENTORY.ProductPrice AS Sold )"
-						+"FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=ORDER_PRODUCTS.ProductID"
-						+"GROUP BY INVENTORY.ProductID ";
-	
+		// String stmt2 = "SELECT INVENTORY.ProductID,INVENTORY.ProductDesc"
+		// 				+"SUM(
+		// 					SELECT ORDER_PRODUCTS.ProductQuantity * INVENTORY.ProductPrice AS Sold 
+		// 					INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=ORDER_PRODUCTS.ProductID )"
+		// 				+"FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=ORDER_PRODUCTS.ProductID"
+		// 				+"GROUP BY INVENTORY.ProductID ";
+		String stmt1="select ProductStockAmount From INVENTORY WHERE ProductID=1";
+		
 		
 		try{
 			PreparedStatement p1=conn.prepareStatement(stmt1);
