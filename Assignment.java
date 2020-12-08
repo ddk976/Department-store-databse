@@ -77,24 +77,25 @@ class Assignment {
 		 String stmt2 = "UPDATE INVENTORY SET ProductStockAmount=? WHERE ProductID = ?";
 		String stockAmount="select ProductStockAmount From INVENTORY WHERE ProductID=?";
 		String stmt3 = "INSERT INTO ORDER_PRODUCTS VALUES"+"(?,?,?)";
-		String stmt4="INSERT INTO STAFF_OPDERS VALUES"+"(?,?)";
+		String stmt4="INSERT INTO STAFF_ORDERS VALUES"+"(?,?)";
 		try{
 			PreparedStatement p2=conn.prepareStatement(stmt2);
 			PreparedStatement pStockAmount=conn.prepareStatement(stockAmount);
 			int[] stock = new int[productIDs.length];
 			int i =0;
 			while(productIDs[i]!=0){
-				pStockAmount.setInt(1,productIDs[1]);
+				pStockAmount.setInt(1,productIDs[i]);
 				ResultSet r1=pStockAmount.executeQuery();
 				while(r1.next()){
-				stock[0]=r1.getInt(1);
+				stock[i]=r1.getInt(1);
 				}
 				i++;
 			}
 			i=0;
 			while(productIDs[i]!=0){
 				p2.setInt(1,productIDs[i]);
-				p2.setInt(2,quantities[i]-stock[i]);
+				System.out.println(stock[i]-quantities[i]);
+				p2.setInt(2,stock[i]-quantities[i]);
 				p2.executeUpdate();
 				i++;
 			}		
@@ -103,11 +104,12 @@ class Assignment {
 			 i=0;
 			while(productIDs[i]!=0){
 				p3.setInt(1,oid);
-				System.out.println(productIDs[1]);
+				System.out.println(productIDs[i]);
 				p3.setInt(2,productIDs[i]);
-				System.out.println(productIDs[1]);
+				System.out.println(productIDs[i]);
 				p3.setInt(3,quantities[i]);
 				p3.executeUpdate();
+				i++;
 			}
 			System.out.println("Success p3");
 			PreparedStatement p4=conn.prepareStatement(stmt4);
@@ -116,17 +118,20 @@ class Assignment {
 				p4.setInt(1,staffID);
 				p4.setInt(2,productIDs[i]);
 				p4.executeUpdate();
+				i++;
 			}
 			System.out.println("Success p4");
 			int[] print = new int[productIDs.length];
 			i=0;
 			while(productIDs[i]!=0){
-				pStockAmount.setInt(1,productIDs[1]);
+				pStockAmount.setInt(1,productIDs[i]);
 				ResultSet r2=pStockAmount.executeQuery();
 				System.out.println("Im in for loop");
 				while(r2.next()){
-				print[0]=r2.getInt(1);
-				System.out.println("Product ID"+productIDs[i]+"is now at"+print[i]);}
+				print[i]=r2.getInt(1);
+				System.out.println("Product ID"+productIDs[i]+"is now at"+print[i]);
+				i++;
+				}
 			}
 		}catch(SQLException se){
 			System.out.println("Could not do process");
@@ -188,7 +193,7 @@ class Assignment {
 	*/
 	public static void option2(Connection conn, int[] productIDs, int[] quantities, String orderDate, String collectionDate, String fName, String LName, int staffID) {
 		// Incomplete - Code for option 2 goes here
-		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)" +"RETURNING OrderID;";
+		String stmt1 = "INSERT INTO ORDERS VALUES"+"(?,?,?,?)";
 		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(?,?,?,?)";
 		String id = "SELECT nextval('sequence_1')";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
@@ -203,9 +208,10 @@ class Assignment {
 			if(rid.next())
     			 oid = rid.getInt(1);
 		PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
-			p1.setString(1,"Collection");
-			p1.setInt(2,0);
-			p1.setDate(3,oDate);
+			p1.setInt(1,oid);
+			p1.setString(2,"Collection");
+			p1.setInt(3,0);
+			p1.setDate(4,oDate);
 			p1.executeUpdate();
 			// ResultSet r1=p1.getGeneratedKeys();
 			// r1.next();
@@ -240,7 +246,7 @@ class Assignment {
 	public static void option3(Connection conn, int[] productIDs, int[] quantities, String orderDate, String deliveryDate, String fName, String LName,
 				   String house, String street, String city, int staffID) {
 		// Incomplete - Code for option 3 goes here
-		String stmt1 = "INSERT INTO ORDERS(OrderType,OrderCompleted,OrderPlaced) VALUES"+"(?,?,?)"+"RETURNING OrderID";
+		String stmt1 = "INSERT INTO ORDERS VALUES"+"(?,?,?,?)";
 		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(?,?,?,?,?,?,?)";
 		String id = "SELECT nextval('sequence_1')";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
@@ -255,9 +261,10 @@ class Assignment {
 			if(rid.next())
     			 oid = rid.getInt(1);
 		PreparedStatement p1=conn.prepareStatement(stmt1,Statement.RETURN_GENERATED_KEYS);
-			p1.setString(1,"Delivery");
-			p1.setInt(2,0);
-			p1.setDate(3,oDate);
+			p1.setInt(1,oid);
+			p1.setString(2,"Delivery");
+			p1.setInt(3,0);
+			p1.setDate(4,oDate);
 			p1.executeUpdate();
 			// ResultSet r1=p1.getGeneratedKeys();
 			// r1.next();
