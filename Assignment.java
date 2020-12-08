@@ -223,6 +223,7 @@ class Assignment {
 			p2.setString(3,LName);
 			p2.setDate(4,cDate);
 			p2.executeUpdate();
+			p2.executeUpdate();
 		}catch(SQLException se){
 			System.out.println("Could not option 2");
 			se.printStackTrace();
@@ -291,10 +292,9 @@ class Assignment {
 		// Incomplete - Code for option 4 goes here
 		// Incomplete - Code for option 4 goes here
 		String stmt1 = "SELECT INVENTORY.ProductID,INVENTORY.ProductDesc"
-						+" SUM(ORDER_PRODUCTS.ProductQuantity * INVENTORY.ProductPrice )"
-						+"FROM INVENTORY,ORDER_PRODUCTS"
-						+"WHERE INVENTORY.ProductID=ORDER_PRODUCTS.ProductID"
-						+"GROUP BY INVENTORY.ProductID ";
+					+" SUM(ORDER_PRODUCTS.ProductQuantity * INVENTORY.ProductPrice )"
+					+"FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=ORDER_PRODUCTS.ProductID"
+					+"GROUP BY INVENTORY.ProductID ";
 		try{
 			PreparedStatement p1=conn.prepareStatement(stmt1);
 			ResultSet r1 = p1.executeQuery(); 
