@@ -314,19 +314,17 @@ class Assignment {
 	*/
 	public static void option4(Connection conn) {
 		// Incomplete - Code for option 4 goes here
-		// String stmt2 = "SELECT INVENTORY.ProductID,INVENTORY.ProductDesc"
-		// 				+"SUM(
-		// 					SELECT ORDER_PRODUCTS.ProductQuantity * INVENTORY.ProductPrice AS Sold 
-		// 					INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=ORDER_PRODUCTS.ProductID )"
-		// 				+"FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=ORDER_PRODUCTS.ProductID"
-		// 				+"GROUP BY INVENTORY.ProductID ";
+		String stmt2 = "SELECT INVENTORY.ProductID,INVENTORY.ProductDesc"
+						+"SUM(ORDER_PRODUCTS.ProductQuantity * INVENTORY.ProductPrice) AS TotalValue"
+						+"FROM ORDER_PRODUCTS  INNER JOIN INVENTORY ON INVENTORY.ProductID=INVENTORY.ProductIDINVENTORY.ProductID"
+						+"GROUP BY INVENTORY.ProductID ";
 		String stmt1="select ProductStockAmount From INVENTORY WHERE ProductID=1";
 		
 		
 		try{
 			PreparedStatement p1=conn.prepareStatement(stmt1);
 			ResultSet r1 = p1.executeQuery(); 
-			System.out.printf("%-9s%-9s%-9d\n","ProductID","ProductDesc","TotalValueSold");
+			System.out.printf("%-9s%-9s%-9d%\n","ProductID","ProductDesc","TotalValueSold");
 			while(r1.next()){
 					int id = r1.getInt(1);
 					String desc = r1.getString(2);
