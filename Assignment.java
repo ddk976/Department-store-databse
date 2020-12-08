@@ -82,21 +82,26 @@ class Assignment {
 			PreparedStatement p2=conn.prepareStatement(stmt2);
 			PreparedStatement pStockAmount=conn.prepareStatement(stockAmount);
 			int[] stock = new int[productIDs.length];
-			for(int i=0;i<productIDs.length;i++){
+			int i =0;
+			while(productIDs[i]!=0){
 				pStockAmount.setInt(1,productIDs[1]);
 				ResultSet r1=pStockAmount.executeQuery();
 				while(r1.next()){
 				stock[0]=r1.getInt(1);
 				}
+				i++;
 			}
-			for(int i=0;i<productIDs.length;i++){
+			i=0;
+			while(productIDs[i]!=0){
 				p2.setInt(1,productIDs[i]);
 				p2.setInt(2,quantities[i]-stock[i]);
 				p2.executeUpdate();
+				i++;
 			}		
 			System.out.println("Success p2");
 			PreparedStatement p3=conn.prepareStatement(stmt3);
-			for(int i=0;i<productIDs.length;i++){
+			 i=0;
+			while(productIDs[i]!=0){
 				p3.setInt(1,oid);
 				System.out.println(productIDs[1]);
 				p3.setInt(2,productIDs[i]);
@@ -106,14 +111,16 @@ class Assignment {
 			}
 			System.out.println("Success p3");
 			PreparedStatement p4=conn.prepareStatement(stmt4);
-			for(int i=0;i<productIDs.length;i++){
+			i=0;
+			while(productIDs[i]!=0){
 				p4.setInt(1,staffID);
 				p4.setInt(2,productIDs[i]);
 				p4.executeUpdate();
 			}
 			System.out.println("Success p4");
 			int[] print = new int[productIDs.length];
-			for(int i=0;i<productIDs.length;i++){
+			i=0;
+			while(productIDs[i]!=0){
 				pStockAmount.setInt(1,productIDs[1]);
 				ResultSet r2=pStockAmount.executeQuery();
 				System.out.println("Im in for loop");
