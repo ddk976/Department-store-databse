@@ -25,51 +25,69 @@ class Assignment {
 			return "";
 		}
  	}
+	 static void print(){
+		 System.out.println("Menu:");
+		 System.out.println("(1) In-Store Purchases");
+		 System.out.println("(2) Collection");
+		 System.out.println("(3) Delivery");
+		 System.out.println("(4) Biggest Sellers");
+		 System.out.println("(5) Reserved Stock");
+		 System.out.println("(6) Staff Life-Time Success");
+		 System.out.println("(7) Staff Contribution");
+		 System.out.println("(8) Employees of the Year");
+		 System.out.println("(0) Quit");
+		 
+	 }
 	public static void main(String args[]) throws SQLException, IOException {
 		// You should only need to fetch the connection details once
 		Connection conn = getConnection();
 		// Incomplete
 		// Code to present a looping menu, read in input data and call the appropriate option menu goes here
 		// You may use readEntry to retrieve input data
-        String selectOption = readEntry("Enter your choice:");
-		int count=1;
-        int[] productIDs = new int[50];
-        int[] quantities = new int [50];
-        String end="Y";
-        while(end.charAt(0)=='Y'&&(selectOption.charAt(0)=='1'||selectOption.charAt(0)=='2'||selectOption.charAt(0)=='3')){
-            productIDs[count-1]=Integer.parseInt(String.valueOf(readEntry("Enter a product ID:")));
-            quantities[count-1]=Integer.parseInt(String.valueOf(readEntry("Enter the quantity sold:")));
-            count++;
-            end = readEntry("Is there another product in the order?:");
-        } 
-        if (selectOption.charAt(0)=='1'){
-        	String orderDate = readEntry("Enter the date sold:");
-        	int staffID = Integer.parseInt(String.valueOf(readEntry("Enter your staff ID:")));
-        	option1(conn,productIDs,quantities,orderDate,staffID);
-        } else if (selectOption.charAt(0)=='2'){
-			String orderDate = readEntry("Enter the date sold:");
-			String collectionDate = readEntry("Enter the date of collection:");
-			String fName = readEntry("Enter the first name of collection:");
-			String LName = readEntry("Enter the last neme of the collection:");
-			int staffID = Integer.parseInt(String.valueOf(readEntry("Enter your staff ID:")));
-			option2(conn,productIDs,quantities,orderDate,collectionDate,fName,LName,staffID);
-		} else if(selectOption.charAt(0)=='3'){
-			String orderDate = readEntry("Enter the date sold:");
-			String collectionDate = readEntry("Enter the date of collection:");
-			String fName = readEntry("Enter the first name of collection:");
-			String LName = readEntry("Enter the last neme of the collection:");
-			String house = readEntry("Enter the house name:");
-			String street = readEntry("Enter the street:");
-			String city = readEntry("Enter the city:");
-			int staffID = Integer.parseInt(String.valueOf(readEntry("Enter your staff ID:")));
-			option3(conn,productIDs,quantities,orderDate,collectionDate,fName,LName,house,street,city,staffID);
-		}else if(selectOption.charAt(0)=='4'){
-			option4(conn);
-		}else if (selectOption.charAt(0)=='5'){
-			String date = readEntry("Enter the date:");
-			option5(conn,date);
-		}else if(selectOption.charAt(0)=='6'){
-			option6(conn);
+		String selectOption="initial";
+		while(selectOption.charAt(0)!='0'){
+			print();
+			System.out.println(selectOption);
+			selectOption = readEntry("Enter your choice:");
+			int count=1;
+			int[] productIDs = new int[50];
+			int[] quantities = new int [50];
+			String end="Y";
+			while(end.charAt(0)=='Y'&&(selectOption.charAt(0)=='1'||selectOption.charAt(0)=='2'||selectOption.charAt(0)=='3')){
+				productIDs[count-1]=Integer.parseInt(String.valueOf(readEntry("Enter a product ID:")));
+				quantities[count-1]=Integer.parseInt(String.valueOf(readEntry("Enter the quantity sold:")));
+				count++;
+				end = readEntry("Is there another product in the order?:");
+			} 
+			if (selectOption.charAt(0)=='1'){
+				String orderDate = readEntry("Enter the date sold:");
+				int staffID = Integer.parseInt(String.valueOf(readEntry("Enter your staff ID:")));
+				option1(conn,productIDs,quantities,orderDate,staffID);
+			} else if (selectOption.charAt(0)=='2'){
+				String orderDate = readEntry("Enter the date sold:");
+				String collectionDate = readEntry("Enter the date of collection:");
+				String fName = readEntry("Enter the first name of collection:");
+				String LName = readEntry("Enter the last neme of the collection:");
+				int staffID = Integer.parseInt(String.valueOf(readEntry("Enter your staff ID:")));
+				option2(conn,productIDs,quantities,orderDate,collectionDate,fName,LName,staffID);
+			} else if(selectOption.charAt(0)=='3'){
+				String orderDate = readEntry("Enter the date sold:");
+				String collectionDate = readEntry("Enter the date of collection:");
+				String fName = readEntry("Enter the first name of collection:");
+				String LName = readEntry("Enter the last neme of the collection:");
+				String house = readEntry("Enter the house name:");
+				String street = readEntry("Enter the street:");
+				String city = readEntry("Enter the city:");
+				int staffID = Integer.parseInt(String.valueOf(readEntry("Enter your staff ID:")));
+				option3(conn,productIDs,quantities,orderDate,collectionDate,fName,LName,house,street,city,staffID);
+			}else if(selectOption.charAt(0)=='4'){
+				option4(conn);
+			}else if (selectOption.charAt(0)=='5'){
+				String date = readEntry("Enter the date:");
+				option5(conn,date);
+			}else if(selectOption.charAt(0)=='6'){
+				option6(conn);
+			}
 		}
 		conn.close();
 	}
@@ -148,7 +166,7 @@ class Assignment {
 	* @param staffID The id of the staff member who sold the order
 	*/
 	public static void option1(Connection conn, int[] productIDs, int[] quantities, String orderDate, int staffID) {
-		// Incomplete - Code for option 1 goes here
+	
 		String stmt1 = "INSERT INTO ORDERS VALUES"+"(?,?,?,?)";
 		String id = "SELECT nextval('sequence_1')";
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
@@ -174,11 +192,8 @@ class Assignment {
 			System.out.println("Could not option");
 			se.printStackTrace();
 		}
-
-		// }catch(SQLException se){
-		// 	System.out.println("Could not open connection with connection string"+conn);
-		// 	se.printlnStackTrace();
-		// }
+	
+	
 	}
 
 	/**
@@ -192,7 +207,7 @@ class Assignment {
 	* @param staffID The id of the staff member who sold the order
 	*/
 	public static void option2(Connection conn, int[] productIDs, int[] quantities, String orderDate, String collectionDate, String fName, String LName, int staffID) {
-		// Incomplete - Code for option 2 goes here
+	
 		String stmt1 = "INSERT INTO ORDERS VALUES"+"(?,?,?,?)";
 		String stmt2 = "INSERT INTO COLLECTIONS VALUES"+"(?,?,?,?)";
 		String id = "SELECT nextval('sequence_1')";
@@ -223,12 +238,12 @@ class Assignment {
 			p2.setString(3,LName);
 			p2.setDate(4,cDate);
 			p2.executeUpdate();
-			p2.executeUpdate();
 		}catch(SQLException se){
 			System.out.println("Could not option 2");
 			se.printStackTrace();
 		}
-
+	
+		
 	}
 
 	/**
@@ -246,7 +261,7 @@ class Assignment {
 	*/
 	public static void option3(Connection conn, int[] productIDs, int[] quantities, String orderDate, String deliveryDate, String fName, String LName,
 				   String house, String street, String city, int staffID) {
-		// Incomplete - Code for option 3 goes here
+
 		String stmt1 = "INSERT INTO ORDERS VALUES"+"(?,?,?,?)";
 		String stmt2 = "INSERT INTO DELIVERIES VALUES"+"(?,?,?,?,?,?,?)";
 		String id = "SELECT nextval('sequence_1')";
@@ -258,6 +273,7 @@ class Assignment {
 	try{
 		PreparedStatement pid = conn.prepareStatement(id);
 			ResultSet rid = pid.executeQuery(); 
+			
 			int oid=0;
 			if(rid.next())
     			 oid = rid.getInt(1);
@@ -279,10 +295,18 @@ class Assignment {
 			p2.setString(5,street);
 			p2.setString(6,city);
 			p2.setDate(7,dDate);
+			p2.executeUpdate();
 		}catch(SQLException se){
 		System.out.println("Could not option3");
 			se.printStackTrace();
 		}
+	int i=0;
+			while(productIDs[i]!=0){
+			System.out.println(productIDs[i]);
+			System.out.println(quantities[i]);
+			i++;
+			}
+	
 	}
 
 	/**
@@ -290,11 +314,12 @@ class Assignment {
 	*/
 	public static void option4(Connection conn) {
 		// Incomplete - Code for option 4 goes here
-		// Incomplete - Code for option 4 goes here
 		String stmt1 = "SELECT INVENTORY.ProductID,INVENTORY.ProductDesc"
-					+" SUM(ORDER_PRODUCTS.ProductQuantity * INVENTORY.ProductPrice )"
-					+"FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=ORDER_PRODUCTS.ProductID"
-					+"GROUP BY INVENTORY.ProductID ";
+						+" SUM(SELECT ORDER_PRODUCTS.ProductQuantity * INVENTORY.ProductPrice AS Sold )"
+						+"FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=ORDER_PRODUCTS.ProductID"
+						+"GROUP BY INVENTORY.ProductID ";
+	
+		
 		try{
 			PreparedStatement p1=conn.prepareStatement(stmt1);
 			ResultSet r1 = p1.executeQuery(); 
