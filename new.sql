@@ -1,1 +1,0 @@
-company=# select * from project;
