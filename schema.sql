@@ -71,9 +71,9 @@ DROP FUNCTION  TotalOrderValue();
 CREATE FUNCTION TotalOrderValue() 
 RETURNS TABLE (oid INTEGER,orderValue INTEGER) AS $orderFigure$
 BEGIN 
-    RETURN QUERY
+   -- RETURN QUERY
     SELECT a.OrderID,SUM(a.total)
-    FROM (SELECT OrderID,productID,INVENTRY.ProductPrice*ORDER_PRODUCTS.ProductQuantity AS total FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=INVENTORY.ProductIDINVENTORY.ProductID)a
+    FROM (SELECT OrderID,ORDER_PRODUCTS.productID,INVENTORY.ProductPrice*ORDER_PRODUCTS.ProductQuantity AS total FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=ORDER_PRODUCTS.ProductID)a
     GROUP BY a.OrderID;
 END $orderFigure$
 LANGUAGE plpgsql;
@@ -82,7 +82,7 @@ DROP FUNCTION sellsFigure();
 CREATE FUNCTION sellsFigure()
 RETURNS TABLE (staffid INTEGER, totalsold INTEGER )AS $soldFigure$
 BEGIN 
-    RETURN QUERY 
+    RETURN QUERY SELECT TotalOrderValue() AS orderFigure;
     SELECT TotalOrderValue() AS orderFigure;
     SELECT a.StaffID,SUM(a.StaffID)
     FROM (SELECT * FROM STAFF_ORDERS INNER JOIN orderFigure ON orderFigure.oid=STAFF_ORDERS.OrderID)a
@@ -93,7 +93,7 @@ DROP FUNCTION seller();
 CREATE FUNCTION seller()
 RETURNS TABLE ( staffName VARCHAR(30), totalValue INTEGER) AS $$
 BEGIN 
-    RETURN QUERY 
+    RETURN QUERY SELECT sellsFigure() AS soldFigure;
     SELECT TotalOrderValue()AS soldFigure;
     SELECT a.name, a.totalsold
     FROM (SELECT totalsold,FName.STAFF+LName.STAFF AS name FROM STAFF INNER JOIN soldFigure ON soldFigure.staffid=STAFF.StaffID)a
