@@ -63,6 +63,40 @@ DROP TABLE STAFF_ORDERS CASCADE;
 CREATE TABLE STAFF_ORDERS(
 StaffID    INTEGER ,
 OrderID    INTEGER ,
+UNIQUE(OrderID),
 FOREIGN KEY(StaffID) REFERENCES STAFF(StaffID)  ON DELETE SET NULL ON UPDATE CASCADE,
 FOREIGN KEY(OrderID) REFERENCES ORDERS(OrderID)  ON DELETE SET NULL ON UPDATE CASCADE
 );
+DROP FUNCTION  TotalOrderValue();
+CREATE FUNCTION TotalOrderValue() 
+RETURNS TABLE (oid INTEGER,orderValue INTEGER) AS $orderFigure$
+BEGIN 
+    RETURN QUERY
+    SELECT a.OrderID,SUM(a.total)
+    FROM (SELECT OrderID,productID,INVENTRY.ProductPrice*ORDER_PRODUCTS.ProductQuantity AS total FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=INVENTORY.ProductIDINVENTORY.ProductID)a
+    GROUP BY a.OrderID;
+END $orderFigure$
+LANGUAGE plpgsql;
+-- SELECT TotalOrderValue();
+DROP FUNCTION sellsFigure();
+CREATE FUNCTION sellsFigure()
+RETURNS TABLE (staffid INTEGER, totalsold INTEGER )AS $soldFigure$
+BEGIN 
+    RETURN QUERY 
+    SELECT TotalOrderValue() AS orderFigure;
+    SELECT a.StaffID,SUM(a.StaffID)
+    FROM (SELECT * FROM STAFF_ORDERS INNER JOIN orderFigure ON orderFigure.oid=STAFF_ORDERS.OrderID)a
+    GROUP BY a.SaffID;
+END $soldFigure$
+LANGUAGE plpgsql;
+DROP FUNCTION seller();
+CREATE FUNCTION seller()
+RETURNS TABLE ( staffName VARCHAR(30), totalValue INTEGER) AS $$
+BEGIN 
+    RETURN QUERY 
+    SELECT TotalOrderValue()AS soldFigure;
+    SELECT a.name, a.totalsold
+    FROM (SELECT totalsold,FName.STAFF+LName.STAFF AS name FROM STAFF INNER JOIN soldFigure ON soldFigure.staffid=STAFF.StaffID)a
+    ORDER BY a.totalsold DESC;
+END $$
+LANGUAGE plpgsql;
