@@ -1,6 +1,7 @@
 import java.io.*;
 import java.sql.*;
-import java.sql.Date;  
+import java.sql.Date; 
+// import java.util.Calendar;
  import java.time.*;
 import java.time.format.*;
 import java.util.Locale;
@@ -296,16 +297,17 @@ class Assignment {
 			p2.setString(6,city);
 			p2.setDate(7,dDate);
 			p2.executeUpdate();
-		}catch(SQLException se){
-		System.out.println("Could not option3");
-			se.printStackTrace();
-		}
-	int i=0;
+			int i=0;
 			while(productIDs[i]!=0){
 			System.out.println(productIDs[i]);
 			System.out.println(quantities[i]);
 			i++;
 			}
+	}
+	catch(SQLException se){
+		System.out.println("Could not option3");
+			se.printStackTrace();
+		}
 	
 	}
 
@@ -318,10 +320,10 @@ class Assignment {
 		// 				+"SUM(a.value) AS totalValue"
 		// 				+"FROM (ORDER_PRODUCTS  INNER JOIN INVENTORY ON INVENTORY.ProductID=INVENTORY.ProductIDINVENTORY.ProductID"
 		// 				+"GROUP BY INVENTORY.ProductID ";
-		String stmt1="SELECT SUM(a.total)"
-					+"FROM (SELECT productID,INVENTRY.ProductPrice*ORDER_PRODUCTS.ProductQuantity AS total
-							FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=INVENTORY.ProductIDINVENTORY.ProductID)a"
-					+"GROUP BY INVENTORY.ProductID ";
+		String stmt1="SELECT IO.ProductID,IO.ProductDesc,SUM(IO.total)"
+					+"FROM(SELECT productID,INVENTRY.ProductPrice*ORDER_PRODUCTS.ProductQuantity AS total FROM INVENTORY INNER JOIN ORDER_PRODUCTS ON INVENTORY.ProductID=INVENTORY.ProductIDINVENTORY.ProductID) IO "
+					+"GROUP BY IO.ProductID "
+					+"ORDER BY DESC ";
 		
 		
 		try{
@@ -329,9 +331,13 @@ class Assignment {
 			ResultSet r1 = p1.executeQuery(); 
 			System.out.printf("%-9s%-9s%-9d%\n","ProductID","ProductDesc","TotalValueSold");
 			while(r1.next()){
+				System.out.println("Im in loop");
 					int id = r1.getInt(1);
+					System.out.println(id);
 					String desc = r1.getString(2);
+					System.out.println(desc);
 					int value = r1.getInt(3);
+					System.out.println(value);
 					System.out.printf("%-9d%-9s%-9d\n",id,desc,value);
 			}
 		}catch(SQLException se){
@@ -347,6 +353,20 @@ class Assignment {
 	*/
 	public static void option5(Connection conn, String date) {
 		// Incomplete - Code for option 5 goes here
+		// String stmt1="SELECT OrderID FROM ORDERS WHERE OrderType='Collection'AND OrderCompleted=0 AND OrderPlaced<? ";
+		// try{
+		// 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
+		// 	LocalDate dateTime = LocalDate.parse(date, formatter);
+		// 	Date nDate=Date.valueOf(dateTime);
+	
+		// }catch(SQLException se){
+		// System.out.println("Could not option3");
+		// 	se.printStackTrace();
+		// }
+
+		// Date nDate=Date.valueOf(odateTime);
+		// PreparedStatement p1=conn.prepareStatement(stmt1);
+
 	}
 
 	/**
@@ -354,6 +374,22 @@ class Assignment {
 	*/
 	public static void option6(Connection conn) {
 		// Incomplete - Code for option 6 goes here
+		String stmt1="SELECT seller()";
+		try{
+			PreparedStatement p1=conn.prepareStatement(stmt1);
+			ResultSet r1 = p1.executeQuery(); 
+			System.out.printf("%-9s%-9s%\n","EmployeeName"," , ","TotalValueSold");
+			while(r1.next()){
+					String name = r1.getString(1);
+					int value = r1.getInt(2);
+					System.out.println(name+" , "+value);
+			}
+		}catch(SQLException se){
+		System.out.println("Could not option3");
+			se.printStackTrace();
+		}
+
+
 	}
 
 	/**
