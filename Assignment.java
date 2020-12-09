@@ -374,9 +374,15 @@ class Assignment {
 	*/
 	public static void option6(Connection conn) {
 		// Incomplete - Code for option 6 goes here
+		String stmt3="SELECT TotalOrderValue()";
+		String stmt2="SELECT sellsFigure()";
 		String stmt1="SELECT seller()";
 		try{
 			PreparedStatement p1=conn.prepareStatement(stmt1);
+			PreparedStatement p2=conn.prepareStatement(stmt2);
+			PreparedStatement p3=conn.prepareStatement(stmt3);
+			ResultSet r3 = p3.executeQuery(); 
+			ResultSet r2 = p2.executeQuery(); 
 			ResultSet r1 = p1.executeQuery(); 
 			System.out.printf("%-9s%-9s%\n","EmployeeName"," , ","TotalValueSold");
 			while(r1.next()){
