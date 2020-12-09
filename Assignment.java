@@ -145,12 +145,13 @@ class Assignment {
                         while(productIDs[i]!=0){
                                 pStockAmount.setInt(1,productIDs[i]);
                                 ResultSet r2=pStockAmount.executeQuery();
-                                System.out.println("Im in for loop");
+                                //System.out.println("Im in for loop");
                                 while(r2.next()){
                                 print[i]=r2.getInt(1);
                                 System.out.println("Product ID"+productIDs[i]+"is now at"+print[i]);
                                 i++;
                                 }
+                                
                         }
                 }catch(SQLException se){
                         System.out.println("Could not do process");
@@ -352,11 +353,23 @@ class Assignment {
         */
         public static void option5(Connection conn, String date) {
                 // Incomplete - Code for option 5 goes here
-                // String stmt1="SELECT OrderID FROM ORDERS WHERE OrderType='Collection'AND OrderCompleted=0 AND OrderPlaced<? ";
-                // try{
-                //      DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
+                // String stmt1="SELECT a.OrderID"
+                //             +"FROM (SELECT * FROM ORDERS INNER JOIN COLLECTIONS ON ORDERS.OrderID=ORDER_PRODUCT.OrderID )a"
+                //             +"WHERE a.CollectionDate<=? AND a.ProductCompleted=0";
+                // String stmt1="UPDATE INVENTORY SET ProductStockAmount= WHERE ProductID = ?";
+                //     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
                 //      LocalDate dateTime = LocalDate.parse(date, formatter);
                 //      Date nDate=Date.valueOf(dateTime);
+                //      int[] orderid = new int[100];
+                // try{
+                //        PreparedStatement p1=conn.prepareStatement(stmt1);
+                //         p1.setDate(nDate-8);
+                //          ResultSet r1 = p1.executeQuery();
+                //         while(r1.next()){
+                //                 orderid[i]=r1.getInt(1);
+                //                 System.out.println(orderid[i]);
+                //                 i++
+                //                 }
 
                 // }catch(SQLException se){
                 // System.out.println("Could not option3");
@@ -372,22 +385,16 @@ class Assignment {
         * @param conn An open database connection 
         */
         public static void option6(Connection conn) {
-                // Incomplete - Code for option 6 goes here
-                //String stmt3="SELECT TotalOrderValue()";
-                //String stmt2="SELECT sellsFigure()";
-                String stmt1="SELECT seller()";
+                String stmt1="SELECT * FROM seller()";
                 try{
                         PreparedStatement p1=conn.prepareStatement(stmt1);
-                  //      PreparedStatement p2=conn.prepareStatement(stmt2);
-                    //    PreparedStatement p3=conn.prepareStatement(stmt3);
-                      //  ResultSet r3 = p3.executeQuery();
-                        //ResultSet r2 = p2.executeQuery();
+                
                         ResultSet r1 = p1.executeQuery();
                         System.out.println("EmployeeName , "+" , TotalValueSold");
                         while(r1.next()){
                                         String fname = r1.getString(1);
                                         String lname = r1.getString(2);
-                                        int value = r3.getInt(3);
+                                        int value = r1.getInt(3);
                                         System.out.println(fname+" , "+lname+","+value);
                         }
                 }catch(SQLException se){
@@ -411,6 +418,21 @@ class Assignment {
         */
         public static void option8(Connection conn, int year) {
                 // Incomplete - Code for option 8 goes here
+                String stmt1="SELECT * FROM name()";
+                try{
+                        PreparedStatement p1=conn.prepareStatement(stmt1);
+                
+                        ResultSet r1 = p1.executeQuery();
+                        while(r1.next()){
+                                        String fname = r1.getString(1);
+                                        String lname = r1.getString(2);
+                                        System.out.println(fname+" , "+lname);
+                        }
+                }catch(SQLException se){
+                System.out.println("Could not option6");
+                        se.printStackTrace();
+                }
+
         }
 
     public static Connection getConnection(){
