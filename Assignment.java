@@ -88,6 +88,11 @@ class Assignment {
                                 option5(conn,date);
                         }else if(selectOption.charAt(0)=='6'){
                                 option6(conn);
+                         }else if(selectOption.charAt(0)=='7'){
+                             option7(conn);
+                         }else if(selectOption.charAt(0)=='8'){
+                             int year = Integer.parseInt(String.valueOf(readEntry("Enter the Year:")));
+                             option8(conn,year);
                          }
                 }
                 conn.close();
@@ -418,10 +423,10 @@ class Assignment {
         */
         public static void option8(Connection conn, int year) {
                 // Incomplete - Code for option 8 goes here
-                String stmt1="SELECT * FROM name()";
+                String stmt1="SELECT * FROM name(?)";
                 try{
                         PreparedStatement p1=conn.prepareStatement(stmt1);
-                
+                        p1.setInt(1,year);
                         ResultSet r1 = p1.executeQuery();
                         while(r1.next()){
                                         String fname = r1.getString(1);
