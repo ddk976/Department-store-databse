@@ -12,15 +12,15 @@ Table staff_orders have two foreign keys staffid which reference to staffid in t
 
 I have not changes anything for these table as I can't find way to make this better.
 
-##Assignment.java
-###method process1:
-/**
-        * @param conn An open database connection 
-        * @param oid OrderID generated when insert tuples into ORDERS table
-        * @param productIDs An array of productIDs associated with an order
-        * @param quantities An array of quantities of a product. The index of a quantity correspeonds with an index in productIDs
-        * @param staffID The id of the staff member who sold the order
-        */
+##Assignment.java  
+###method process1:  
+/**  
+        * @param conn An open database connection   
+        * @param oid OrderID generated when insert tuples into ORDERS table  
+        * @param productIDs An array of productIDs associated with an order  
+        * @param quantities An array of quantities of a product. The index of a quantity correspeonds with an index in productIDs  
+        * @param staffID The id of the staff member who sold the order  
+        */  
 used to update inventory,order_product,and staff_product table, print out the productSotckAmount after ordered. used by option1-3
 ###method option1:
  convet input input string into sql date.Generating an orderid, updating Orders table. call process1;
