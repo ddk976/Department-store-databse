@@ -166,6 +166,16 @@ BEGIN
             (SELECT * FROM id(inputyear )) AS f ON STAFF.StaffID=f.staffid) a;
 END $$
 LANGUAGE plpgsql;
+DROP FUNCTION op5(date DATE);
+CREATE FUNCTION op5(date DATE)
+RETURNS TABLE (oid INT)AS $$
+BEGIN
+    RETURN QUERY
+    SELECT a.OrderID
+    FROM (SELECT ORDERS.OrderID,CollectionDate,OrderCompleted FROM ORDERS INNER JOIN COLLECTIONS ON ORDERS.OrderID=COLLECTIONS.OrderID )a
+    WHERE date-a.CollectionDate>=8 AND a.OrderCompleted=0;
+END $$
+LANGUAGE plpgsql;
     
 
 
