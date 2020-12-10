@@ -332,12 +332,10 @@ class Assignment {
         */
         public static void option5(Connection conn, String date) {
                 // Incomplete - Code for option 5 goes her
-                  String stmt1="SELECT a.OrderID"
-                            +"FROM (SELECT OrderID FROM ORDERS INNER JOIN COLLECTIONS ON ORDERS.OrderID=ORDER_PRODUCT.OrderID )a"
-                            +"WHERE a.CollectionDate<=SELECT date'?'- interval'8 days' AND a.ProductCompleted=0";
+                 String stmt1="SELECT * FROM op5(?)";
                 String stmt2="UPDATE INVENTORY SET ProductStockAmount=? WHERE ProductID = ?";
                 String stmt3="SELECT ProductID,ProductQuantity FROM ORDER_PRODUCTS Where OrderID=?";
-                String stmt4 = "SELECT ProductStockAmount FROM INVENTORY WHERE ProductID = ? "
+                String stmt4 = "SELECT ProductStockAmount FROM INVENTORY WHERE ProductID = ? ";
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
                      LocalDate dateTime = LocalDate.parse(date, formatter);
                      Date nDate=Date.valueOf(dateTime);
@@ -349,10 +347,11 @@ class Assignment {
                         PreparedStatement p4=conn.prepareStatement(stmt4);
                         p1.setDate(1,nDate);
                          ResultSet r1 = p1.executeQuery();
+                         int i=0;
                         while(r1.next()){
                                 orderid[i]=r1.getInt(1);
                                 System.out.println(orderid[i]);
-                                i++
+                                i++;
                                 }
                        i=0;
                         while(orderid[i]!=0){
@@ -364,7 +363,7 @@ class Assignment {
                                while(r3.next()){
                                        pid=r3.getInt(1);
                                        quan=r3.getInt(2);
-                                       p4.setInt(pid);
+                                       p4.setInt(1,pid);
                                         ResultSet r4 = p4.executeQuery();
                                         while (r4.next()){
                                         oAmount=r4.getInt(1);
