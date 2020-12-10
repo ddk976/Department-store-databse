@@ -317,7 +317,7 @@ class Assignment {
                                         int id = r1.getInt(1);
                                         String desc = r1.getString(2);
                                         int value = r1.getInt(3);
-                                        System.out.println(id+","+desc+" , £"+value);
+                                        System.out.println(id+","+desc+" , "+value);
                         }
                 }catch(SQLException se){
                 System.out.println("Could not option3");
@@ -336,6 +336,10 @@ class Assignment {
                 String stmt2="UPDATE INVENTORY SET ProductStockAmount=? WHERE ProductID = ?";
                 String stmt3="SELECT ProductID,ProductQuantity FROM ORDER_PRODUCTS Where OrderID=?";
                 String stmt4 = "SELECT ProductStockAmount FROM INVENTORY WHERE ProductID = ? ";
+                String stmt5="DELETE FROM ORDERS WHERE OrderID=?";
+                // String stmt5="DELETE FROM ORDERS_PRODUCTS WHERE OrderID=?";
+                // String stmt5="DELETE FROM STAFF_ORDERS WHERE OrderID=?";
+
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yy", Locale.ENGLISH);
                      LocalDate dateTime = LocalDate.parse(date, formatter);
                      Date nDate=Date.valueOf(dateTime);
@@ -345,6 +349,7 @@ class Assignment {
                         PreparedStatement p3=conn.prepareStatement(stmt3);
                         PreparedStatement p2=conn.prepareStatement(stmt2);
                         PreparedStatement p4=conn.prepareStatement(stmt4);
+                        PreparedStatement p5=conn.prepareStatement(stmt5);
                         p1.setDate(1,nDate);
                          ResultSet r1 = p1.executeQuery();
                          int i=0;
@@ -372,6 +377,8 @@ class Assignment {
                                         p2.setInt(2,pid);
                                         p2.executeUpdate();
                                }
+                               p5.setInt(1,orderid[i]);
+                               System.out.println("Order"+orderid[i]+"has been cancelled");
                                 i++;
                         }
 
@@ -395,7 +402,7 @@ class Assignment {
                                         String fname = r1.getString(1);
                                         String lname = r1.getString(2);
                                         int value = r1.getInt(3);
-                                        System.out.println(fname+" , "+lname+",£"+value);
+                                        System.out.println(fname+" , "+lname+",$"+value);
                         }
                 }catch(SQLException se){
                 System.out.println("Could not option6");
