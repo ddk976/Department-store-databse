@@ -1,16 +1,21 @@
 ## psql
-For inventory table I set ProductID as primary key. To store the description fforr every item, we should use unique ID to distinguish items. Items may have same discription,price and amount. But should have different id so that when placed in order we known which exactly product placed.  I also added a check constraint to check is the price added is non-zero. 
-In order table the OrderID was set to be a primary key used to identify each order. A check constraint checking the input of OrderType value if belongs to InStore, Collection or Delivery. Another Check clause checking the input of OrderCompleted state is 0 or 1. 
+For inventory table I set `ProductID` as primary key. To store the description for every item, we should use unique ID to distinguish items. Items may have same discription,price and amount. But should have different id so that when placed in order we known which exactly product placed.  I also added a check constraint to check is the price added is non-zero. 
+In order table the` OrderID` was set to be a primary key used to identify each order. A check constraint checking the input of OrderType value if belongs to InStore, Collection or Delivery. Another Check clause checking the input of OrderCompleted state is 0 or 1. 
 
-The order_products table does not have a primary key, as there is not any other table's attribute need reference this table. The unique key should be combination order and productid as same product should not added to same order twice. OrderID should be a foreign key who reference to OrderID in table orders. ProductID references to ProductID in inventory table. These foreign keys added a contraint 'ON DELETE SET NULL ON UPDATE CASCADE,to make sure when this value change in table orders and inventory they should need to update to same value or set to null. 
+The `order_products` table does not have a primary key, as there is not any other table's attribute need reference this table. The unique key should be combination order and `productid` as same product should not added to same order twice. `OrderID` should be a foreign key who reference to `OrderID` in table orders. `ProductID` references to `ProductID` in inventory table. These foreign keys added a contraint ***ON DELETE CASCADE ON UPDATE CASCADE***,to make sure when this value change in table orders and inventory they should need to update to same value or delete the whole row. 
 
- Table deliveries and collections both have a foreign key OrderID references OrderID in table orders.This one is also ON DELET SET NULL ON UPDATE CASCADE 
+ Table `deliveries `and `collections` both have a foreign key` OrderID` references `OrderID `in table orders.This one is also  ***ON DELETE CASCADE ON UPDATE CASCADE***
  
-Table staff have a primary key StaffID used to identify each staff. 
+Table `staff` have a primary key `StaffID` used to identify each staff. 
 
-Table staff_orders have two foreign keys staffid which reference to staffid in table staff and orderID in table order. These foreign keys are ON DELET SET NULL ON UPDATE CASCADE. 
+Table `staff_orders` have two foreign keys staffid which reference to `staffid` in table `staff` and `orderID` in table` order`. These foreign keys are O***ON DELETE CASCADE ON UPDATE CASCADE***.  
+## Design Choices
+I think this table structure is succinct and clear. But is we consider more satuation, like consider of the customer informations or if the there are more than one store.  
+I want to add a table called `Store_Inventory`with attribute Stores, Inventory,quantities.This table storing each inventory stores in which store and the quantities in that store.  
+Adding attribute `store` to `orders`,if its a instore order specify orderd in which store. 
+Adding attribute `store` to `staff`,to inform each staff is working in which store. 
 
-I have not changes anything for these table as I can't find way to make this better.
+
 
 ## Assignment.java  
 ### method process1:  
@@ -30,12 +35,16 @@ used to update inventory,order_product,and staff_product table, print out the pr
  convet input input string into sql date.Generating an orderid, updating Orders table and delivery table. call process1;  
 ### method option4:  
  query productid and this product total sold value by subquery a inner joined table.The subquery table was produced by inventory table inner joined with order_product table, we need product of quantities in order_product table and ProductPrice in inventory table, The total sold value got by sum up the product and group by productid.  
+### method option5:
+A function called `op5(date DATE)` are created in sql file to quary the orderid for uncomplete collection orders which has collectionDate at more than8 days before the particular day. The parameter here is equals to the parameter of option5 method in java file.  
+In Assigment file, These id has has selected out stored in an array. For every order in this array,selectiong every ProductID and thire quantities out then add this quantities back in the ProductStockAmount in inventory table.In last step, delet these Order in table orders. AS other table which related with table order all have foreign key reference with orderid in table order along with ***ON DELETE CASCADE ON UPDATE CASCADE*** contraints. So that the orders in other table related with these order will be deleted automatically.  
+
 ### method option6:  
-I made three functions in plpgsql for this option,`TotalOrderValue()`,`sellsFigure()`,`seller()`.  
+Three functions in plpgsql are made for this option,`TotalOrderValue()`,`sellsFigure()`,`seller()`.  
 the first funtion get the total value made by each order. `sellsFigure()` need the table generated by `TotalOrderValue()` get tatol soled value for each staff.`seller()` returns the name and totalSoldValue for each staff who sold more than 50000 pounds and range by descending.  
 I select all the attribute of the table producted by `seller()` in java file.  
 ### method option8:  
-I made 4 functions for this option, they all with parameter ***inputyear INTEGER*** `year(inputyear)`,`op8(inputyear)`,`id(inputyear)`, `name(inputyear)`.  The `year()` function returns all orderid orderd in particular year.`op8()` function returns the total value sold form each product in that year as will as the orderid which contains this product.  
+ 4 functions are made for this option, they all with parameter ***inputyear INTEGER*** `year(inputyear)`,`op8(inputyear)`,`id(inputyear)`, `name(inputyear)`.  The `year()` function returns all orderid orderd in particular year.`op8()` function returns the total value sold form each product in that year as will as the orderid which contains this product.  
 `id(inputyear)`function returns the staff id who have sold at least £30000 and have sold at least one of the item that have sold more than £20000 for this year.`name()`function changing the id queryed by `id(inputyear)` into name.  
 In java file I slelected all from the table generated by `name(inputyear)` where ***inputyear*** = ***year*** as parameter of option8 function   
  
